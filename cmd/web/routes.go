@@ -3,25 +3,32 @@ package main
 import (
 	"net/http"
 
-	"github.com/NganJason/hotel-booking/pkg/config"
-	"github.com/NganJason/hotel-booking/pkg/handlers"
-	"github.com/go-chi/chi/v5"
+	"github.com/NganJason/hotel-booking/internal/config"
+	"github.com/NganJason/hotel-booking/internal/handlers"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/gorilla/mux"
 )
 
 func routes(app *config.AppConfig) http.Handler {
-	mux := chi.NewRouter()
 
-	// Middlewares
-	mux.Use(middleware.Recoverer)	
-	mux.Use(NoSurf)
-	mux.Use(SessionLoad)
-	mux.Use(WriteToConsole)
+	router := mux.NewRouter().StrictSlash(true)
 
-	mux.Get("/", handlers.Repo.HandleHome)
-	mux.Get("/about", handlers.Repo.HandleAbout)
+	router.Use(middleware.Recoverer)	
+	router.Use(SessionLoad)
+	router.Use(WriteToConsole)
+	
+	router.HandleFunc("/", handlers.Repo.HandleHome).Methods("GET")
+	router.HandleFunc("/about", handlers.Repo.HandleAbout).Methods("GET")
+	router.HandleFunc("/generals", handlers.Repo.HandleGenerals).Methods("GET")
+	router.HandleFunc("/major", handlers.Repo.HandleMajor).Methods("GET")
+	router.HandleFunc("/search-availability", handlers.Repo.HandleSearchAvailability).Methods("GET")
 
-	fileServer := http.FileServer(http.Dir("./static/"))
-	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
-	return mux
+	router.HandleFunc("/search-availability", handlers.Repo.PostAvailability).Methods("POST")
+	router.HandleFunc("/search-availability-json", handlers.Repo.AvailabilityJSON).Methods("POST")
+
+	fs := http.FileServer(http.Dir("./static/"))
+
+	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
+
+	return router
 }

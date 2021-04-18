@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/NganJason/hotel-booking/pkg/config"
-	"github.com/NganJason/hotel-booking/pkg/handlers"
-	"github.com/NganJason/hotel-booking/pkg/render"
+	"github.com/NganJason/hotel-booking/internal/config"
+	"github.com/NganJason/hotel-booking/internal/handlers"
+	"github.com/NganJason/hotel-booking/internal/render"
 	"github.com/alexedwards/scs/v2"
 )
 
@@ -42,19 +42,11 @@ func main() {
 	repo := handlers.NewRepo(&app)
 	handlers.NewHandlers(repo)
 
-	// Handlers
-	// http.HandleFunc("/", handlers.Repo.HandleHome)
-	// http.HandleFunc("/about", handlers.Repo.HandleAbout)
 
 	fmt.Printf("Server is listening to %s", PORT_NUMBER)
-	// _ = http.ListenAndServe(PORT_NUMBER, nil) 
 
-	srv := &http.Server {
-		Addr: PORT_NUMBER,
-		Handler: routes(&app),
-	}
+	http.Handle("/", routes(&app))
+	http.ListenAndServe(":8080", nil)
 
-	err = srv.ListenAndServe()
-	log.Fatal(err)
 }
 

@@ -1,0 +1,38 @@
+.notie-container {
+  box-shadow: none;
+}
+
+.img-container {
+  width: 50%;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.nav-container,
+.footer-container {
+  flex-grow: 1;
+  display: flex;
+}
+
+.content-container {
+  flex-grow: 4;
+}
+
+.footer-container {
+  min-height: 10vh;
+}
+
+.footer {
+  flex: 1;
+  background-color: #163b65;
+  color: white;
+  font-size: 80%;
+}
+
+.datepicker {
+  z-index: 10000;
+}

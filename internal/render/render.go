@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/NganJason/hotel-booking/pkg/config"
-	"github.com/NganJason/hotel-booking/pkg/models"
+	"github.com/NganJason/hotel-booking/internal/config"
+	"github.com/NganJason/hotel-booking/internal/models"
 )
 var functions = template.FuncMap{}
 
@@ -20,8 +20,12 @@ func NewTemplates(a *config.AppConfig) {
 	app = a
 }
 
+func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+	return td
+}
+
 // RenderTemplate renders templates using html/template
-func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
+func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) {
 	tc := app.TemplateCache
 
 	t, ok := tc[tmpl]
@@ -31,6 +35,8 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData)
 	}
 
 	buf := new(bytes.Buffer)
+
+	td= AddDefaultData(td, r)
 
 	_ = t.Execute(buf, td)
 
