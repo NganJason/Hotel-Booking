@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/NganJason/hotel-booking/internal/config"
+	"github.com/NganJason/hotel-booking/internal/forms"
 	"github.com/NganJason/hotel-booking/internal/models"
 	"github.com/NganJason/hotel-booking/internal/render"
 )
@@ -78,4 +79,46 @@ func (repo *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(out)
+}
+
+func (repo *Repository) HandlerMakeReservation(w http.ResponseWriter, r *http.Request) {
+	var emptyReservation models.Reservation
+	data := make(map[string]interface{})
+	data["reservation"] = emptyReservation
+
+	render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{
+		Form: forms.New(nil),
+		Data: data,
+	})
+}
+
+func (repo *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	reservation := models.Reservation{
+		FirstName: r.Form.Get("first_name"),
+		LastName: r.Form.Get("last_name"),
+		Email: r.Form.Get("email"),
+		Phone: r.Form.Get("phone"),
+	}
+
+	form := forms.New(r.PostForm)
+
+	form.Required("first_name", "last_name", "email")
+	form.MinLength("first_name", 3, r)
+
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["reservation"] = reservation
+
+		render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{
+			Form: form,
+			Data: data,
+		})
+		return 
+	}
 }

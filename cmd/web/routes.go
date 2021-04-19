@@ -21,10 +21,13 @@ func routes(app *config.AppConfig) http.Handler {
 	router.HandleFunc("/about", handlers.Repo.HandleAbout).Methods("GET")
 	router.HandleFunc("/generals", handlers.Repo.HandleGenerals).Methods("GET")
 	router.HandleFunc("/major", handlers.Repo.HandleMajor).Methods("GET")
-	router.HandleFunc("/search-availability", handlers.Repo.HandleSearchAvailability).Methods("GET")
 
+	router.HandleFunc("/search-availability", handlers.Repo.HandleSearchAvailability).Methods("GET")
 	router.HandleFunc("/search-availability", handlers.Repo.PostAvailability).Methods("POST")
 	router.HandleFunc("/search-availability-json", handlers.Repo.AvailabilityJSON).Methods("POST")
+
+	router.HandleFunc("/make-reservation", handlers.Repo.HandlerMakeReservation).Methods("GET")
+	router.HandleFunc("/post-reservation", handlers.Repo.PostReservation).Methods("POST")
 
 	fs := http.FileServer(http.Dir("./static/"))
 
