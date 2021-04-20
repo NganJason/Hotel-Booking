@@ -7,6 +7,7 @@ import (
 
 	"github.com/NganJason/hotel-booking/internal/config"
 	"github.com/NganJason/hotel-booking/internal/forms"
+	"github.com/NganJason/hotel-booking/internal/helpers"
 	"github.com/NganJason/hotel-booking/internal/models"
 	"github.com/NganJason/hotel-booking/internal/render"
 )
@@ -95,7 +96,7 @@ func (repo *Repository) HandlerMakeReservation(w http.ResponseWriter, r *http.Re
 func (repo *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
-		log.Println(err)
+		helpers.ServerError(w, err)
 		return
 	}
 
