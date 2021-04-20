@@ -28,6 +28,7 @@ func routes(app *config.AppConfig) http.Handler {
 
 	router.HandleFunc("/make-reservation", handlers.Repo.HandlerMakeReservation).Methods("GET")
 	router.HandleFunc("/post-reservation", handlers.Repo.PostReservation).Methods("POST")
+	router.HandleFunc("/reservation-summary", handlers.Repo.ReservationSummary)
 
 	fs := http.FileServer(http.Dir("./static/"))
 

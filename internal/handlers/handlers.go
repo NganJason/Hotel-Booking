@@ -110,6 +110,7 @@ func (repo *Repository) PostReservation(w http.ResponseWriter, r *http.Request) 
 
 	form.Required("first_name", "last_name", "email")
 	form.MinLength("first_name", 3, r)
+	form.IsEmail("email")
 
 	if !form.Valid() {
 		data := make(map[string]interface{})
@@ -120,5 +121,26 @@ func (repo *Repository) PostReservation(w http.ResponseWriter, r *http.Request) 
 			Data: data,
 		})
 		return 
+	}else {
+		repo.App.Session.Put(r.Context(), "reservation", reservation)
+		http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
 	}
+}
+
+func (repo *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
+	reservation, ok := repo.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+
+	if !ok {
+		log.Println("cannot get item from session")
+		repo.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
+	repo.App.Session.Remove(r.Context(), "reservation")
+	
+	data := make(map[string]interface{})
+	data["reservation"] = reservation
+	render.RenderTemplate(w, r, "reservation-summary.page.html", &models.TemplateData{
+		Data: data,
+	})
 }

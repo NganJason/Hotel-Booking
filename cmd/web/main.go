@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,6 +9,7 @@ import (
 
 	"github.com/NganJason/hotel-booking/internal/config"
 	"github.com/NganJason/hotel-booking/internal/handlers"
+	"github.com/NganJason/hotel-booking/internal/models"
 	"github.com/NganJason/hotel-booking/internal/render"
 	"github.com/alexedwards/scs/v2"
 )
@@ -18,6 +20,9 @@ var app config.AppConfig
 var session * scs.SessionManager
 
 func main() {	
+
+	// Define type of value to store in session
+	gob.Register(models.Reservation{})
 
 	// Change this to true when in production
 	app.InProduction = false
@@ -32,7 +37,7 @@ func main() {
 	tc, err := render.CreateTemplateCache()
 
 	if err != nil {
-		log.Fatal("Cannot create template cache")
+		log.Fatal(fmt.Sprintf("Cannot create template cache %v", err))
 	}
 
 	app.TemplateCache = tc
