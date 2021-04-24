@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/NganJason/hotel-booking/internal/config"
+	"github.com/NganJason/hotel-booking/internal/driver"
 	"github.com/NganJason/hotel-booking/internal/handlers"
 	"github.com/NganJason/hotel-booking/internal/helpers"
 	"github.com/NganJason/hotel-booking/internal/models"
@@ -24,11 +25,13 @@ var infoLog *log.Logger
 var errorLog *log.Logger
 
 func main() {	
-	err := run()
+	db, err := run()
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	defer db.SQL.Close()
+	
 	fmt.Printf("Server is listening to %s", PORT_NUMBER)
 
 	http.Handle("/", routes(&app))
@@ -36,9 +39,12 @@ func main() {
 
 }
 
-func run() error{
-		// Define type of value to store in session
+func run() (*driver.DB, error) {
+	// Define type of value to store in session
 	gob.Register(models.Reservation{})
+	gob.Register(models.User{})
+	gob.Register(models.Room{})
+	gob.Register(models.Restriction{})
 
 	// Change this to true when in production
 	app.InProduction = false
@@ -56,20 +62,27 @@ func run() error{
 	session.Cookie.Secure = app.InProduction
 	app.Session = session
 
+	// connect to database
+	log.Println("Connecting to database...")
+	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=hotel-booking user=jason.ngan password=")
+	if err != nil {
+		log.Fatal("Cannot connect to database")
+	}
+
 	tc, err := render.CreateTemplateCache()
 
 	if err != nil {
 		log.Fatal(fmt.Sprintf("Cannot create template cache %v", err))
-		return err
+		return nil, err
 	}
 
 	app.TemplateCache = tc
-	render.NewTemplates(&app)
+	render.NewRenderer(&app)
 	helpers.NewHelpers(&app)
 
 	// Initiate repository pattern
-	repo := handlers.NewRepo(&app)
+	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 
-	return nil
+	return db, nil
 }
