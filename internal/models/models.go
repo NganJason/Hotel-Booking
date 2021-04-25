@@ -34,7 +34,7 @@ type Reservation struct {
 	Email 		string
 	Phone 		string
 	StartDate 	time.Time
-	EndDte 		time.Time
+	EndDate 	time.Time
 	RoomID 		int
 	CreatedAt 	time.Time
 	UpdatedAt 	time.Time
