@@ -24,6 +24,7 @@ export let checkAvailabilityHandler = function () {
       const rp = new DateRangePicker(elem, {
         format: "yyyy-mm-dd",
         showOnFocus: true,
+        minDate: new Date(),
       });
     },
     didOpen: () => {
