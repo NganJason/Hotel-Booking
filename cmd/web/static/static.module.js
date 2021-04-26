@@ -4,12 +4,11 @@ export let checkAvailabilityStaticForm = `
           <div class="col">
               <div class="form-row" id="reservation-dates-modal">
                   <div class="col">
-                      <input disabled required class="form-control" type="text" name="start" id="start" placeholder="Arrival">
+                      <input disabled required class="form-control" type="text" name="start_date" id="start" placeholder="Arrival">
                   </div>
                   <div class="col">
-                      <input disabled required class="form-control" type="text" name="end" id="end" placeholder="Departure">
+                      <input disabled required class="form-control" type="text" name="end_date" id="end" placeholder="Departure">
                   </div>
-
               </div>
           </div>
       </div>

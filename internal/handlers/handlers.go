@@ -114,12 +114,38 @@ func (repo *Repository) PostAvailability(w http.ResponseWriter, r *http.Request)
 type jsonResponse struct {
 	OK bool `json:"ok"`
 	Message string `json:"message"`
+	RoomID string `json:"room_id"`
+	StartDate string `json:"start_date"`
+	EndDate string `json:"end_date"`
+}
+
+type AvailabilityReq struct {
+	StartDate 	string `json:"start_date"`
+	EndDate 	string `json:"end_date"`
 }
 
 func (repo *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
+	var req AvailabilityReq
+	
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&req)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	
+	layout := "2006-01-02"
+	startDate, _ := time.Parse(layout, req.StartDate)
+	endDate, _ := time.Parse(layout, req.EndDate)
+
+	roomID, _ := strconv.Atoi(r.Form.Get("room_id"))
+	available, _ := repo.DB.SearchAvailabilityByDatesByRoomID(startDate, endDate, roomID)
 	resp := jsonResponse{
-		OK: true,
-		Message: "Available!",
+		OK: available,
+		Message: "",
+		StartDate: req.StartDate,
+		EndDate: req.EndDate,
+		RoomID: strconv.Itoa(roomID),
 	}
 
 	out, err := json.MarshalIndent(resp, "", "     ")

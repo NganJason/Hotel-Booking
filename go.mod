@@ -3,9 +3,12 @@ module github.com/NganJason/hotel-booking
 go 1.15
 
 require (
+	github.com/0xAX/notificator v0.0.0-20191016112426-3962a5ea8da1 // indirect
 	github.com/alexedwards/scs/v2 v2.4.0
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
 	github.com/cockroachdb/cockroach-go v2.0.1+incompatible // indirect
+	github.com/codegangsta/envy v0.0.0-20141216192214-4b78388c8ce4 // indirect
+	github.com/codegangsta/gin v0.0.0-20171026143024-cafe2ce98974 // indirect
 	github.com/fatih/color v1.10.0 // indirect
 	github.com/go-chi/chi v1.5.4
 	github.com/go-chi/chi/v5 v5.0.2
@@ -27,6 +30,8 @@ require (
 	github.com/jmoiron/sqlx v1.3.3 // indirect
 	github.com/justinas/nosurf v1.1.1
 	github.com/lib/pq v1.10.0 // indirect
+	github.com/mattn/go-shellwords v1.0.11 // indirect
 	github.com/spf13/cobra v1.1.3 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
+	gopkg.in/urfave/cli.v1 v1.20.0 // indirect
 )
