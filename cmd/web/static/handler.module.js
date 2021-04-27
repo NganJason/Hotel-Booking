@@ -12,6 +12,7 @@ export let checkAvailabilityHandler = function () {
       let payload = {
         start_date: formData.getAll("start_date")[0],
         end_date: formData.getAll("end_date")[0],
+        room_id: 1,
       };
 
       fetch("/search-availability-json", {
