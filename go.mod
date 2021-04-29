@@ -24,6 +24,7 @@ require (
 	github.com/gobuffalo/pop/v5 v5.3.3 // indirect
 	github.com/gobuffalo/validate v2.0.4+incompatible // indirect
 	github.com/gofrs/uuid v4.0.0+incompatible // indirect
+	github.com/golangci/golangci-lint v1.39.0 // indirect
 	github.com/gorilla/mux v1.8.0
 	github.com/jackc/pgconn v1.8.1
 	github.com/jackc/pgx/v4 v4.11.0
@@ -32,6 +33,7 @@ require (
 	github.com/lib/pq v1.10.0 // indirect
 	github.com/mattn/go-shellwords v1.0.11 // indirect
 	github.com/spf13/cobra v1.1.3 // indirect
+	github.com/xhit/go-simple-mail/v2 v2.8.1
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	gopkg.in/urfave/cli.v1 v1.20.0 // indirect
 )
