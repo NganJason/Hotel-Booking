@@ -39,6 +39,9 @@ func routes(app *config.AppConfig) http.Handler {
 	secureRoute := router.PathPrefix("/admin").Subrouter()
 	secureRoute.Use(Auth)
 	secureRoute.HandleFunc("/dashboard", handlers.Repo.AdminDashboard).Methods("GET")
+	secureRoute.HandleFunc("/reservations-new", handlers.Repo.AdminNewReservations).Methods("GET")
+	secureRoute.HandleFunc("/reservations-all", handlers.Repo.AdminAllReservations).Methods("GET")
+	secureRoute.HandleFunc("/reservations-calendar", handlers.Repo.AdminReservationsCalendar).Methods("GET")
 
 	fs := http.FileServer(http.Dir("./static/"))
 
