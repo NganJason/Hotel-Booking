@@ -34,6 +34,7 @@ require (
 	github.com/mattn/go-shellwords v1.0.11 // indirect
 	github.com/spf13/cobra v1.1.3 // indirect
 	github.com/xhit/go-simple-mail/v2 v2.8.1
+	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	gopkg.in/urfave/cli.v1 v1.20.0 // indirect
 )

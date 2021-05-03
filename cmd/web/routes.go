@@ -32,6 +32,14 @@ func routes(app *config.AppConfig) http.Handler {
 	router.HandleFunc("/post-reservation", handlers.Repo.PostReservation).Methods("POST")
 	router.HandleFunc("/reservation-summary", handlers.Repo.ReservationSummary)
 
+	router.HandleFunc("/user/login", handlers.Repo.ShowLogin).Methods("GET")
+	router.HandleFunc("/user/login", handlers.Repo.PostShowLogin).Methods("POST")
+	router.HandleFunc("/user/logout", handlers.Repo.Logout).Methods("GET")
+
+	secureRoute := router.PathPrefix("/admin").Subrouter()
+	secureRoute.Use(Auth)
+	secureRoute.HandleFunc("/dashboard", handlers.Repo.AdminDashboard).Methods("GET")
+
 	fs := http.FileServer(http.Dir("./static/"))
 
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
