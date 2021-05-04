@@ -26,9 +26,11 @@
                 {{range $res}}
                 <tr>
                     <td>{{.ID}}</td>
-                    <a href="/admin/reservation/new/{{.ID}}">
-                        <td>{{.LastName}}</td>
-                    </a>
+                    <td>
+                        <a href="/admin/reservations/new/{{.ID}}">
+                            {{.LastName}}
+                        </a>
+                    </td>
                     <td>{{.Room.RoomName}}</td>
                     <td>{{humanDate .StartDate}}</td>
                     <td>{{humanDate .EndDate}}</td>
