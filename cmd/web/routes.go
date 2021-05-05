@@ -43,6 +43,8 @@ func routes(app *config.AppConfig) http.Handler {
 	secureRoute.HandleFunc("/reservations-all", handlers.Repo.AdminAllReservations).Methods("GET")
 	secureRoute.HandleFunc("/reservations-calendar", handlers.Repo.AdminReservationsCalendar).Methods("GET")
 	secureRoute.HandleFunc("/process-reservation/{src}/{id}", handlers.Repo.AdminProcessReservation).Methods("GET")
+	secureRoute.HandleFunc("/delete-reservation/{src}/{id}", handlers.Repo.AdminDeleteReservation)
+
 	secureRoute.HandleFunc("/reservations/{src}/{id}", handlers.Repo.AdminShowReservations).Methods("GET")
 	secureRoute.HandleFunc("/reservations/{src}/{id}", handlers.Repo.AdminShowPostReservation).Methods("POST")
 

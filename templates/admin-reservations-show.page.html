@@ -78,9 +78,16 @@
             />
             </div>
             <hr />
-            <input type="submit" class="btn btn-primary" value="Save" />
-            <a href="/admin/reservations-{{$src}}" class="btn btn-warning">Cancel</a>
-            <a href="/admin/process-reservation/{{$src}}/{{$res.ID}}" class="btn btn-info">Mark as Processed</a>
+            <div class="float-left">
+                <input type="submit" class="btn btn-primary" value="Save" />
+                <a href="/admin/reservations-{{$src}}" class="btn btn-warning">Cancel</a>
+                <a href="/admin/process-reservation/{{$src}}/{{$res.ID}}" class="btn btn-info">Mark as Processed</a>
+            </div>
+
+            <div class="float-right">
+                <a href="#" class="btn btn-danger">Delete</a>
+            </div>
+            <div class="clearfix"></div>
         </form>
       </div>
 {{end}}
