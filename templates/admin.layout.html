@@ -16,6 +16,11 @@
     />
     <link
       rel="stylesheet"
+      type="text/css"
+      href="https://unpkg.com/notie/dist/notie.min.css"
+    />
+    <link
+      rel="stylesheet"
       href="/static/admin/vendors/base/vendor.bundle.base.css"
     />
     <!-- endinject -->
@@ -150,11 +155,16 @@
     <script src="/static/admin/js/hoverable-collapse.js"></script>
     <script src="/static/admin/js/template.js"></script>
     <script src="/static/admin/js/todolist.js"></script>
+    <script src="https://unpkg.com/notie"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script type="module" src="/static/index.js"></script>
     <!-- endinject -->
     <!-- Custom js for this page-->
     <script src="/static/admin/js/dashboard.js"></script>
     <!-- End custom js for this page-->
-
+    <script>
+      let attention = Prompt();
+    </script>
     {{block "js" . }} {{end}}
   </body>
 </html>
