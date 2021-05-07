@@ -1,11 +1,76 @@
-{{template "admin" .}}
-
-{{define "page-title"}}
-    Reservation Calendar
-{{end}}
-
+{{template "admin" .}} {{define "page-title"}} Reservation Calendar {{end}}
 {{define "content"}}
-    <div class="col-md-12">
-        Resrevation calendar content
-    </div>
+{{$now := index .Data "now"}}
+{{$dim := index .IntMap "days_in_month"}}
+{{$rooms := index .Data "rooms"}}
+{{$curYear := index .StringMap "this_month_year"}}
+{{$curMonth := index .StringMap "this_month"}}
+<div class="col-md-12">
+  <div class="text-center">
+    <h3>
+      {{formatDate $now "January"}} {{formatDate $now "2006"}}
+    </h3>
+  </div>
+
+  <div class="float-left">
+    <a
+      href='/admin/reservations-calendar?y={{index .StringMap "last_month_year"}}&m={{index .StringMap "last_month"}}'
+      class="btn btn-sm btn-outline-secondary"
+      >&lt;&lt;</a
+    >
+  </div>
+  <div class="float-right">
+    <a
+      href='/admin/reservations-calendar?y={{index .StringMap "next_month_year"}}&m={{index .StringMap "next_month"}}'
+      class="btn btn-sm btn-outline-secondary"
+      >&gt;&gt;</a
+    >
+  </div>
+  <div class="clearfix"></div>
+    {{range $rooms}}
+      {{$roomID := .ID}}
+      {{$blocks := index $.Data (printf "block_map_%d" .ID)}}
+      {{$reservations := index $.Data (printf "reservation_map_%d" .ID)}}
+      
+
+      <h4>{{.RoomName}}</h4>
+      <div class="table-response">
+        <table class="table table-bordered table-sm">
+          <tr class="table-dark">
+            {{range $index := iterate $dim}}
+            <td class="text-center">
+              {{$index}}
+            </td>
+            {{end}}
+          </tr>
+          <tr>
+            {{range $index := iterate $dim}}
+            {{$curr := (printf "%s-%s-%d" $curYear $curMonth ($index))}}
+            <td>
+              {{if gt (index $reservations $curr) 0}}
+                <a href="/admin/reservations/cal/{{index $reservations $curr}}">
+                
+                  <span class="text-danger text-center"><strong>R</strong></span>
+                </a>
+              {{else}}
+              
+                <input 
+                  {{if gt (index $blocks $curr) 0}}
+                    checked
+                    name = 'removed_block_{{$roomID}}_{{$curr}}'
+                    value = '{{index $blocks $curr}}'
+
+                  {{else}}
+                    name = 'add_block_{{$roomID}}_{{$curr}}'
+                  {{end}}
+                type="checkbox">
+              {{end}}
+            </td>
+            {{end}}
+          </tr>
+        </table>
+      </div>
+      {{end}}
+
+</div>
 {{end}}
