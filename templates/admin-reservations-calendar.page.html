@@ -27,6 +27,9 @@
     >
   </div>
   <div class="clearfix"></div>
+  <form method="post" action="/admin/reservations-calendar">
+    <input type="hidden" name="m" value="{{$curMonth}}">
+    <input type="hidden" name="y" value="{{$curYear}}">
     {{range $rooms}}
       {{$roomID := .ID}}
       {{$blocks := index $.Data (printf "block_map_%d" .ID)}}
@@ -62,6 +65,7 @@
 
                   {{else}}
                     name = 'add_block_{{$roomID}}_{{$curr}}'
+                    value="1"
                   {{end}}
                 type="checkbox">
               {{end}}
@@ -71,6 +75,8 @@
         </table>
       </div>
       {{end}}
-
+      <hr>
+      <input type="submit" class="btn btn-primary" value="Save Changes">
+  </form>
 </div>
 {{end}}

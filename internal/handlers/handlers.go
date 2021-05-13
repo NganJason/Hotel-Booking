@@ -587,3 +587,54 @@ func (repo *Repository) AdminDeleteReservation(w http.ResponseWriter, r *http.Re
 	repo.App.Session.Put(r.Context(), "flash", "Reservation is deleted")
 	http.Redirect(w, r, fmt.Sprintf("/admin/reservations-%s", src), http.StatusSeeOther)
 }
+
+func (repo *Repository) AdminPostReservationsCalendar(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	year, _ := strconv.Atoi(r.Form.Get("y"))
+	month, _ := strconv.Atoi(r.Form.Get("m"))
+
+	rooms, err := repo.DB.AllRooms()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	form := forms.New(r.PostForm)
+
+	for _, room := range rooms {
+		curMap := repo.App.Session.Get(r.Context(), fmt.Sprintf("block_map_%d", room.ID)).(map[string]int)
+
+		for name, value := range curMap {
+			if !form.Has(fmt.Sprintf("remove_block_%d_%s", room.ID, name), r) {
+				err := repo.DB.DeleteBlockByID(value)
+				if err != nil {
+					helpers.ServerError(w, err)
+				}
+			}
+		}
+	}
+
+	for name, _ := range r.PostForm {
+		if strings.HasPrefix(name, "add_block") {
+			exploded := strings.Split(name, "_")
+			roomID, _ := strconv.Atoi(exploded[2])
+
+			t, _ := time.Parse("2006-01-2", exploded[3])
+
+			err := repo.DB.InsertBlockForRoom(roomID, t)
+			if err != nil {
+				log.Println(err)
+			}
+
+		}
+	}
+
+	repo.App.Session.Put(r.Context(), "flash", "Changes saved")
+	http.Redirect(w, r, fmt.Sprintf("/admin/reservations-calendar?y=%d&m=%d", year, month), http.StatusSeeOther)
+}
